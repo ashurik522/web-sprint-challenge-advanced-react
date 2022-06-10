@@ -91,8 +91,20 @@ export default function AppFunctional(props) {
    setState({...state, email: evt.target.value})
   }
 
+  const validateEmail= () =>{
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(state.email))
+      {
+        return (true)
+      }
+        return (false)
+    }
+
+
+
+
   const onSubmit = (evt) => {
     evt.preventDefault()
+    console.log(validateEmail())
     const newItem = {
       "x": state.xCoordinate,
       "y": state.yCoordinate,
@@ -103,7 +115,11 @@ export default function AppFunctional(props) {
       setState({...state, message: 'Ouch: email is required' })
     } else if(state.email === 'foo@bar.baz'){
       setState({...state, message: 'foo@bar.baz failure #71'})
-    } else {
+    } else if(validateEmail() === false){
+      setState({...state, message: 'Ouch: email must be a valid email'})
+    }
+    
+    else {
       axios.post('http://localhost:9000/api/result', newItem)
       .then(res => {
         setState({...state, message: res.data.message, email: ''})

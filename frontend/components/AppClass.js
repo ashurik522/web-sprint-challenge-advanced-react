@@ -93,19 +93,31 @@ export default class AppClass extends React.Component {
    this.setState({...this.state, email: evt.target.value})
   }
 
+  validateEmail = () => {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email))
+    {
+      return (true)
+    }
+      return (false)
+  }
+
 
   onSubmit = (evt) => {
     evt.preventDefault()
+    console.log(this.validateEmail())
     const newItem = {
       "x": this.state.xCoordinate,
       "y": this.state.yCoordinate,
       "steps": this.state.totalSteps,
       "email": this.state.email.trim()
     }
+
     if(this.state.email === ''){
       this.setState({...this.state, message: 'Ouch: email is required' })
     } else if(this.state.email === 'foo@bar.baz'){
       this.setState({...this.state, message: 'foo@bar.baz failure #71'})
+    } else if(this.validateEmail() === false){
+      this.setState({...this.state, message: 'Ouch: email must be a valid email'})
     } else {
       axios.post('http://localhost:9000/api/result', newItem)
       .then(res => {
