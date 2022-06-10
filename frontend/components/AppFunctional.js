@@ -88,7 +88,7 @@ export default function AppFunctional(props) {
     })
   }
   const   onChange = (evt) => {
-   setState({...state, email: evt.target.value.trim()})
+   setState({...state, email: evt.target.value})
   }
 
   const onSubmit = (evt) => {
@@ -102,7 +102,7 @@ export default function AppFunctional(props) {
 
     axios.post('http://localhost:9000/api/result', newItem)
       .then(res => {
-        setState({...state, message: res.data.message})
+        setState({...state, message: res.data.message, email: ''})
       })
       .catch(err => console.error(err))
   }
@@ -134,7 +134,7 @@ export default function AppFunctional(props) {
           <button onClick={handleReset} id="reset">reset</button>
         </div>
         <form onSubmit={onSubmit} >
-          <input onChange={onChange} id="email" type="email" placeholder="type email"></input>
+          <input onChange={onChange} value={state.email} id="email" type="email" placeholder="type email"></input>
           <input id="submit" type="submit"></input>
         </form>
       </div>
