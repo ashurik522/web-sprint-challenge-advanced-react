@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 // Suggested initial states
 const initialMessage = ''
@@ -7,72 +7,114 @@ const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
 
 export default function AppFunctional(props) {
-  // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
-  // You can delete them and build your own logic from scratch.
 
-  function getXY() {
-    // It it not necessary to have a state to track the coordinates.
-    // It's enough to know what index the "B" is at, to be able to calculate them.
+  const[state, setState] = useState({
+    totalSteps: initialSteps,
+    xCoordinate: 2,
+    yCoordinate: 2,
+    board: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    currentIndex: initialIndex,
+    message: initialMessage,
+    email: initialEmail,
+  })
+
+  const handleUp = (index) => {
+    const newBoard = [...state.board];
+    newBoard[index] = state.currentIndex;
+    setState({
+      ...state,
+      yCoordinate: state.yCoordinate > 1 ? state.yCoordinate - 1 : state.yCoordinate,
+      message: state.yCoordinate > 1 ? "" : "You can't go up",
+      currentIndex: state.currentIndex > 2 ? state.currentIndex - 3 : state.currentIndex,
+      totalSteps: state.currentIndex > 2 ? state.totalSteps + 1 : state.totalSteps,
+      board: newBoard
+    })
+  };
+
+  const handleDown = (index) => {
+    const newBoard = [...state.board];
+    newBoard[index] = state.currentIndex;
+    setState({
+      ...state,
+      yCoordinate: state.yCoordinate < 3 ? state.yCoordinate + 1 : state.yCoordinate,
+      message: state.yCoordinate < 3 ? "" : "You can't go down",
+      currentIndex: state.currentIndex < 6 ? state.currentIndex + 3 : state.currentIndex,
+      totalSteps: state.currentIndex < 6 ? state.totalSteps + 1 : state.totalSteps,
+      board: newBoard
+    })
+  };
+
+  const handleLeft = (index) => {
+    const newBoard = [...state.board];
+    newBoard[index] = state.currentIndex;
+    setState({
+      ...state,
+      xCoordinate: state.xCoordinate > 1 ? state.xCoordinate - 1 : state.xCoordinate,
+      message: state.xCoordinate > 1 ? "" : "You can't go left",
+      currentIndex: (state.currentIndex === 0 || state.currentIndex === 3 || state.currentIndex ===6) 
+        ? state.currentIndex : state.currentIndex - 1,
+      totalSteps: (state.currentIndex === 0 || state.currentIndex === 3 || state.currentIndex ===6) 
+        ? state.totalSteps: state.totalSteps + 1,
+      board: newBoard
+      })
+  };
+
+  const handleRight = (index) => {
+    const newBoard = [...state.board];
+    newBoard[index] = state.currentIndex;
+    setState({
+      ...state,
+      xCoordinate: state.xCoordinate < 3 ? state.xCoordinate + 1 : state.xCoordinate,
+      message: state.xCoordinate < 3 ? "" : "You can't go right",
+      currentIndex: (state.currentIndex === 2 || state.currentIndex === 5 || state.currentIndex ===8) 
+        ? state.currentIndex : state.currentIndex + 1,
+      totalSteps: (state.currentIndex === 2 || state.currentIndex === 5 || state.currentIndex === 8) 
+        ? state.totalSteps: state.totalSteps + 1,
+      board: newBoard
+      })
+  };
+
+  const handleReset = () => {
+    setState({
+      totalSteps: initialSteps,
+      xCoordinate: 2,
+      yCoordinate: 2,
+      board: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      currentIndex: initialIndex,
+      message: initialMessage,
+      email: initialEmail,
+    })
   }
-
-  function getXYMessage() {
-    // It it not necessary to have a state to track the "Coordinates (2, 2)" message for the user.
-    // You can use the `getXY` helper above to obtain the coordinates, and then `getXYMessage`
-    // returns the fully constructed string.
-  }
-
-  function reset() {
-    // Use this helper to reset all states to their initial values.
-  }
-
-  function getNextIndex(direction) {
-    // This helper takes a direction ("left", "up", etc) and calculates what the next index
-    // of the "B" would be. If the move is impossible because we are at the edge of the grid,
-    // this helper should return the current index unchanged.
-  }
-
-  function move(evt) {
-    // This event handler can use the helper above to obtain a new index for the "B",
-    // and change any states accordingly.
-  }
-
-  function onChange(evt) {
-    // You will need this to update the value of the input.
-  }
-
-  function onSubmit(evt) {
-    // Use a POST request to send a payload to the server.
-  }
-
+  
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
-        <h3 id="coordinates">Coordinates (2, 2)</h3>
-        <h3 id="steps">You moved 0 times</h3>
+          <h3 id="coordinates">Coordinates ({state.xCoordinate}, {state.yCoordinate})</h3>
+          <h3 id="steps">You moved {state.totalSteps} times</h3>
+        </div>
+        <div id="grid">
+          {
+            state.board.map(idx => (
+              <div key={idx} className={`square${idx === state.currentIndex ? ' active' : ''}`}>
+                {idx === state.currentIndex ? 'B' : null}
+              </div>
+            ))
+          }
+        </div>
+        <div className="info">
+          <h3 id="message">{state.message}</h3>
+        </div>
+        <div id="keypad">
+          <button onClick={handleLeft} id="left">LEFT</button>
+          <button onClick={handleUp} id="up">UP</button>
+          <button onClick={handleRight} id="right">RIGHT</button>
+          <button onClick={handleDown} id="down">DOWN</button>
+          <button onClick={handleReset} id="reset">reset</button>
+        </div>
+        <form>
+          <input id="email" type="email" placeholder="type email"></input>
+          <input id="submit" type="submit"></input>
+        </form>
       </div>
-      <div id="grid">
-        {
-          [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-            <div key={idx} className={`square${idx === 4 ? ' active' : ''}`}>
-              {idx === 4 ? 'B' : null}
-            </div>
-          ))
-        }
-      </div>
-      <div className="info">
-        <h3 id="message"></h3>
-      </div>
-      <div id="keypad">
-        <button id="left">LEFT</button>
-        <button id="up">UP</button>
-        <button id="right">RIGHT</button>
-        <button id="down">DOWN</button>
-        <button id="reset">reset</button>
-      </div>
-      <form>
-        <input id="email" type="email" placeholder="type email"></input>
-        <input id="submit" type="submit"></input>
-      </form>
-    </div>
   )
-}
+ }
