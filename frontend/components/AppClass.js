@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 
 // Suggested initial states
 const initialMessage = ''
@@ -6,12 +7,6 @@ const initialEmail = ''
 const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
 
-const initialState = {
-  message: initialMessage,
-  email: initialEmail,
-  index: initialIndex,
-  steps: initialSteps,
-}
 
 export default class AppClass extends React.Component {
  
@@ -81,6 +76,18 @@ export default class AppClass extends React.Component {
       })
   };
 
+  handleReset = () => {
+    this.setState({
+      totalSteps: initialSteps,
+      xCoordinate: 2,
+      yCoordinate: 2,
+      board: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      currentIndex: initialIndex,
+      message: initialMessage,
+      email: initialEmail,
+    })
+  }
+
   onChange = (evt) => {
     // You will need this to update the value of the input.
   }
@@ -114,7 +121,7 @@ export default class AppClass extends React.Component {
           <button onClick={this.handleUp} id="up">UP</button>
           <button onClick={this.handleRight} id="right">RIGHT</button>
           <button onClick={this.handleDown} id="down">DOWN</button>
-          <button id="reset">reset</button>
+          <button onClick={this.handleReset} id="reset">reset</button>
         </div>
         <form>
           <input id="email" type="email" placeholder="type email"></input>
