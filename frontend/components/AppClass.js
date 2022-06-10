@@ -29,7 +29,8 @@ export default class AppClass extends React.Component {
       message: this.state.yCoordinate > 1 ? "" : "You can't go up",
       currentIndex: this.state.currentIndex > 2 ? this.state.currentIndex - 3 : this.state.currentIndex,
       totalSteps: this.state.currentIndex > 2 ? this.state.totalSteps + 1 : this.state.totalSteps,
-      board: newBoard
+      board: newBoard,
+      
     })
   };
 
@@ -42,7 +43,7 @@ export default class AppClass extends React.Component {
       message: this.state.yCoordinate < 3 ? "" : "You can't go down",
       currentIndex: this.state.currentIndex < 6 ? this.state.currentIndex + 3 : this.state.currentIndex,
       totalSteps: this.state.currentIndex < 6 ? this.state.totalSteps + 1 : this.state.totalSteps,
-      board: newBoard
+      board: newBoard,
     })
   };
 
@@ -57,7 +58,7 @@ export default class AppClass extends React.Component {
         ? this.state.currentIndex : this.state.currentIndex - 1,
       totalSteps: (this.state.currentIndex === 0 || this.state.currentIndex === 3 || this.state.currentIndex ===6) 
         ? this.state.totalSteps: this.state.totalSteps + 1,
-      board: newBoard
+      board: newBoard,
       })
   };
 
@@ -72,7 +73,7 @@ export default class AppClass extends React.Component {
         ? this.state.currentIndex : this.state.currentIndex + 1,
       totalSteps: (this.state.currentIndex === 2 || this.state.currentIndex === 5 || this.state.currentIndex === 8) 
         ? this.state.totalSteps: this.state.totalSteps + 1,
-      board: newBoard
+      board: newBoard,
       })
   };
 
@@ -89,11 +90,24 @@ export default class AppClass extends React.Component {
   }
 
   onChange = (evt) => {
-    // You will need this to update the value of the input.
+   this.setState({...this.state, email: evt.target.value})
   }
 
   onSubmit = (evt) => {
-    // Use a POST request to send a payload to the server.
+    e.preventDefault()
+    const newItem = {
+      x: this.state.xCoordinate,
+      y: this.state.yCoordinate,
+      steps: this.state.totalSteps,
+      email: this.state.email.trim()
+    }
+
+    axios.post('http://localhost:9000/api/result', newItem)
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => console.error(err))
+
   }
 
   render() {
@@ -123,8 +137,8 @@ export default class AppClass extends React.Component {
           <button onClick={this.handleDown} id="down">DOWN</button>
           <button onClick={this.handleReset} id="reset">reset</button>
         </div>
-        <form>
-          <input id="email" type="email" placeholder="type email"></input>
+        <form  onSubmit={this.onSubmit}>
+          <input onChange={this.onChange} value={this.state.email} id="email" type="email" placeholder="type email"></input>
           <input id="submit" type="submit"></input>
         </form>
       </div>

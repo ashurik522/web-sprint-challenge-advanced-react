@@ -18,6 +18,7 @@ export default function AppFunctional(props) {
     email: initialEmail,
   })
 
+
   const handleUp = (index) => {
     const newBoard = [...state.board];
     newBoard[index] = state.currentIndex;
@@ -85,6 +86,12 @@ export default function AppFunctional(props) {
       email: initialEmail,
     })
   }
+  const   onChange = (evt) => {
+   setState({...state, email: evt.target.value.trim()})
+  }
+  
+
+
   
   return (
     <div id="wrapper" className={props.className}>
@@ -112,7 +119,7 @@ export default function AppFunctional(props) {
           <button onClick={handleReset} id="reset">reset</button>
         </div>
         <form>
-          <input id="email" type="email" placeholder="type email"></input>
+          <input onChange={onChange} id="email" type="email" placeholder="type email"></input>
           <input id="submit" type="submit"></input>
         </form>
       </div>
