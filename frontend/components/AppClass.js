@@ -101,7 +101,6 @@ export default class AppClass extends React.Component {
       return (false)
   }
 
-
   onSubmit = (evt) => {
     evt.preventDefault()
     console.log(this.validateEmail())

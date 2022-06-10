@@ -87,7 +87,8 @@ export default function AppFunctional(props) {
       email: initialEmail,
     })
   }
-  const   onChange = (evt) => {
+  
+  const onChange = (evt) => {
    setState({...state, email: evt.target.value})
   }
 
@@ -99,9 +100,6 @@ export default function AppFunctional(props) {
         return (false)
     }
 
-
-
-
   const onSubmit = (evt) => {
     evt.preventDefault()
     console.log(validateEmail())
@@ -111,15 +109,14 @@ export default function AppFunctional(props) {
       "steps": state.totalSteps,
       "email": state.email.trim()
     }
+
     if(state.email === ''){
       setState({...state, message: 'Ouch: email is required' })
     } else if(state.email === 'foo@bar.baz'){
       setState({...state, message: 'foo@bar.baz failure #71'})
     } else if(validateEmail() === false){
       setState({...state, message: 'Ouch: email must be a valid email'})
-    }
-    
-    else {
+    } else {
       axios.post('http://localhost:9000/api/result', newItem)
       .then(res => {
         setState({...state, message: res.data.message, email: ''})
