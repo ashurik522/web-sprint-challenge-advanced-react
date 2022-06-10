@@ -93,6 +93,7 @@ export default class AppClass extends React.Component {
    this.setState({...this.state, email: evt.target.value})
   }
 
+
   onSubmit = (evt) => {
     evt.preventDefault()
     const newItem = {
@@ -101,13 +102,17 @@ export default class AppClass extends React.Component {
       "steps": this.state.totalSteps,
       "email": this.state.email.trim()
     }
-
-    axios.post('http://localhost:9000/api/result', newItem)
+    if(this.state.email === ''){
+      this.setState({...this.state, message: 'Ouch: email is required' })
+    } else if(this.state.email === 'foo@bar.baz'){
+      this.setState({...this.state, message: 'foo@bar.baz failure #23'})
+    } else {
+      axios.post('http://localhost:9000/api/result', newItem)
       .then(res => {
         this.setState({...this.state, message: res.data.message, email: ''})
       })
       .catch(err => console.error(err))
-
+    }
   }
 
   render() {
