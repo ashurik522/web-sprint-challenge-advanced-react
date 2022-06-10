@@ -94,17 +94,17 @@ export default class AppClass extends React.Component {
   }
 
   onSubmit = (evt) => {
-    e.preventDefault()
+    evt.preventDefault()
     const newItem = {
-      x: this.state.xCoordinate,
-      y: this.state.yCoordinate,
-      steps: this.state.totalSteps,
-      email: this.state.email.trim()
+      "x": this.state.xCoordinate,
+      "y": this.state.yCoordinate,
+      "steps": this.state.totalSteps,
+      "email": this.state.email.trim()
     }
 
     axios.post('http://localhost:9000/api/result', newItem)
       .then(res => {
-        console.log(res)
+        this.setState({message: res.data.message})
       })
       .catch(err => console.error(err))
 
@@ -116,7 +116,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">Coordinates ({this.state.xCoordinate}, {this.state.yCoordinate})</h3>
-          <h3 id="steps">You moved {this.state.totalSteps} times</h3>
+          <h3 id="steps">You moved {this.state.totalSteps} {this.state.totalSteps === 1 ? 'time' : 'times'}</h3>
         </div>
         <div id="grid">
           {

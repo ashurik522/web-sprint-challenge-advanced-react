@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 // Suggested initial states
 const initialMessage = ''
@@ -89,15 +90,29 @@ export default function AppFunctional(props) {
   const   onChange = (evt) => {
    setState({...state, email: evt.target.value.trim()})
   }
-  
 
+  const onSubmit = (evt) => {
+    evt.preventDefault()
+    const newItem = {
+      "x": state.xCoordinate,
+      "y": state.yCoordinate,
+      "steps": state.totalSteps,
+      "email": state.email.trim()
+    }
+
+    axios.post('http://localhost:9000/api/result', newItem)
+      .then(res => {
+        setState({...state, message: res.data.message})
+      })
+      .catch(err => console.error(err))
+  }
 
   
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
           <h3 id="coordinates">Coordinates ({state.xCoordinate}, {state.yCoordinate})</h3>
-          <h3 id="steps">You moved {state.totalSteps} times</h3>
+          <h3 id="steps">You moved {state.totalSteps} {state.totalSteps === 1 ?'time' : 'times'}</h3>
         </div>
         <div id="grid">
           {
@@ -118,7 +133,7 @@ export default function AppFunctional(props) {
           <button onClick={handleDown} id="down">DOWN</button>
           <button onClick={handleReset} id="reset">reset</button>
         </div>
-        <form>
+        <form onSubmit={onSubmit} >
           <input onChange={onChange} id="email" type="email" placeholder="type email"></input>
           <input id="submit" type="submit"></input>
         </form>
