@@ -102,7 +102,7 @@ export default function AppFunctional(props) {
     if(state.email === ''){
       setState({...state, message: 'Ouch: email is required' })
     } else if(state.email === 'foo@bar.baz'){
-      setState({...state, message: 'foo@bar.baz failure #23'})
+      setState({...state, message: 'foo@bar.baz failure #71'})
     } else {
       axios.post('http://localhost:9000/api/result', newItem)
       .then(res => {

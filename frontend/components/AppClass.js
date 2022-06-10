@@ -105,7 +105,7 @@ export default class AppClass extends React.Component {
     if(this.state.email === ''){
       this.setState({...this.state, message: 'Ouch: email is required' })
     } else if(this.state.email === 'foo@bar.baz'){
-      this.setState({...this.state, message: 'foo@bar.baz failure #23'})
+      this.setState({...this.state, message: 'foo@bar.baz failure #71'})
     } else {
       axios.post('http://localhost:9000/api/result', newItem)
       .then(res => {
